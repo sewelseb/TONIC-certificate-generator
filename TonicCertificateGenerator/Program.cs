@@ -9,19 +9,22 @@ namespace TonicCertificateGenerator
     {
         static void Main(string[] args)
         {
-            SetupServices();
+            SetupServices(args);
 
             Console.WriteLine("Hello World!");
         }
 
-        private static void SetupServices()
+        private static void SetupServices(string[] args)
         {
-            var serviceProvider = new ServiceCollection()
+            var serviceCollection = new ServiceCollection()
                 .AddSingleton<IContactManager, ContactManager>()
                 .AddSingleton<ISendinBlueConnector, SendinBlueConnector>()
-                .AddSingleton<IExcelFilesManager, ExcelFilesManager>();
+                .AddSingleton<IExcelFilesManager, ExcelFilesManager>()
+                .AddSingleton<IInputParser, InputParser>();
 
-            serviceProvider.BuildServiceProvider();
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var parser = serviceProvider.GetService<IInputParser>();
+
         }
     }
 }
