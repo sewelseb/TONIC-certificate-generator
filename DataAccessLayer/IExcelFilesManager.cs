@@ -6,5 +6,6 @@ namespace DataAccessLayer
     public interface IExcelFilesManager
     {
         string GetClients();
+        string GetCellValue();
     }
 }

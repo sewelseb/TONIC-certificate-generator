@@ -11,6 +11,8 @@ namespace BusinessLayerTests
         private IContactManager _contactManager;
         private Mock<IExcelFilesManager> _excelFileManagerMock;
 
+        private ExcelFilesManager _excelFileManager = new ExcelFilesManager(@"D:\SUPINFO\STAGE\TonicTeaching\TONIC-certificate-generator\contact.xlsx");
+
         [TestInitialize]
         public void Initialize()
         {
@@ -18,8 +20,11 @@ namespace BusinessLayerTests
             _excelFileManagerMock
                 .Setup(x => x.GetClients())
                 .Returns("Test");
+            _excelFileManagerMock.Setup(x => x.GetCellValue()).Returns("jean");
             _contactManager = new ContactManager(_excelFileManagerMock.Object);
         }
+
+        #region BUSINESS LAYER
 
         [TestMethod]
         public void LoadContacts_ShouldReturnAString()
@@ -36,5 +41,27 @@ namespace BusinessLayerTests
 
             _excelFileManagerMock.Verify(x => x.GetClients(), Times.Once);
         }
+
+        #endregion
+
+
+
+        #region DATA ACCESS LAYER
+
+
+        [TestMethod]
+        public void LoadExcel_ShouldReturnJeanAsAString()
+        {
+            string name = _excelFileManagerMock.Object.GetCellValue();
+            //string name = _excelFileManager.GetCellValue("jean");
+
+            Assert.AreEqual("jean", name);
+        }
+
+
+
+        #endregion
+
+
     }
 }
