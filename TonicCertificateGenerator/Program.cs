@@ -10,7 +10,6 @@ namespace TonicCertificateGenerator
         static void Main(string[] args)
         {
             SetupServices();
-
             Console.WriteLine("Hello World!");
         }
 

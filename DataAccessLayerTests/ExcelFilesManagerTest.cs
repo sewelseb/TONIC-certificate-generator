@@ -2,7 +2,6 @@ using DataAccessLayer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using Moq;
-using System;
 using System.Collections.Generic;
 
 namespace DataAccessLayerTests
@@ -10,7 +9,6 @@ namespace DataAccessLayerTests
     [TestClass]
     public class ExcelFilesManagerTest
     {
-
         private ExcelFilesManager _excelFileManager = new ExcelFilesManager(@"D:\SUPINFO\STAGE\TonicTeaching\TONIC-certificate-generator\contact.xlsx");
         private Mock<IExcelFilesManager> _excelFileManagerMock;
 
