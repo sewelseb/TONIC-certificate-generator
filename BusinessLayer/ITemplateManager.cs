@@ -1,7 +1,12 @@
-﻿namespace BusinessLayer
+﻿using System;
+using DocumentFormat.OpenXml.Drawing;
+using Models;
+
+namespace BusinessLayer
 {
     public interface ITemplateManager
     {
-        bool replaceKey(string replaced, string value);
+
+        Object GetTemplateFromContact(string replaced, Contact contact);
     }
 }
