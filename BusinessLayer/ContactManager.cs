@@ -14,7 +14,7 @@ namespace BusinessLayer
 
         public string LoadContacts()
         {
-            var contacts = _excelFilesManager.GetClients();
+            var contacts = _excelFilesManager.GetContacts();
             return "";
         }
     }

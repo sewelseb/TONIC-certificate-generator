@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using DocumentFormat.OpenXml.Drawing.Charts;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Models;
 
 namespace DataAccessLayer
 {
@@ -13,23 +12,18 @@ namespace DataAccessLayer
         private string _path;
         private SpreadsheetDocument _document;
         private WorkbookPart _wbPart;
-        private DataColumn column;
-        private DataRow row;
+        private List<Contact> _contacts;
 
         public ExcelFilesManager(string filePath)
         {
             _path = filePath;
             _document = SpreadsheetDocument.Open(_path, false);
             _wbPart = _document.WorkbookPart;
+            _contacts = new List<Contact>();
         }
 
-        public string GetClients()
-        {
-            throw new NotImplementedException();
-        }
-
-        // Test Only !!
-        public string GetCellValue(string name)
+        // Only for 3 column excel file. Have to modify GetContact method to separate the string separation logic 
+        public List<Contact> GetContacts()
         {
             // Get the 'first' sheet
             Sheet theSheet = _wbPart.Workbook.Sheets.GetFirstChild<Sheet>();
@@ -39,30 +33,32 @@ namespace DataAccessLayer
             IEnumerable<Row> rows = wsPart.GetFirstChild<SheetData>().Descendants<Row>();
             foreach (Row row in rows)
             {
-                var value = "";
-                foreach(Cell cell in row.Descendants<Cell>())
+                var _names = "";
+                string _mail = "";
+                int count = 0;
+                if (row.RowIndex != 1)
                 {
-                    value = GetCellValue(_document, cell);
+                    foreach (Cell cell in row.Descendants<Cell>())
+                    {
+                        if (count != 2) _names = (count == 0 ? _names = GetCellValue(cell) : _names = $"{_names} {GetCellValue(cell)}");
+                        else _mail = GetCellValue(cell);
+                        count++;
+                    }
+                    _contacts.Add(new Contact { mail = _mail, names = _names});
                 }
             }
-            throw new NotImplementedException();
-            //return theCell.InnerText;
+            return _contacts;
         }
 
-
-        private string GetCellValue(SpreadsheetDocument doc, Cell cell)
+        // Reference : https://gist.github.com/kzelda/2facdff2d924349fe96c37eab0e9ee47
+        private string GetCellValue(Cell cell)
         {
             string value = cell.CellValue.InnerText;
             if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
             {
-                return doc.WorkbookPart.SharedStringTablePart.SharedStringTable.ChildElements.GetItem(int.Parse(value)).InnerText;
+                return _wbPart.SharedStringTablePart.SharedStringTable.ChildElements.GetItem(int.Parse(value)).InnerText;
             }
             return value;
-        }
-
-        public string GetCellValue()
-        {
-            throw new NotImplementedException();
         }
 
 
