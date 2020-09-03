@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BusinessLayer;
+using DataAccessLayer;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,8 +16,7 @@ namespace BusinessLayer.Tests
         [TestInitialize]
         public void Initialize()
         {
-            var contactManagerMock = new Mock<IContactManager>();
-            _wordTemplateManager = new WordTemplateManager(contactManagerMock.Object);
+            _wordTemplateManager = new WordTemplateManager();
         }
 
         [TestMethod()]

@@ -4,5 +4,6 @@
     {
         public string names { get; set; }
         public string mail { get; set; }
+
     }
 }

@@ -9,12 +9,13 @@ namespace DataAccessLayerTests
     [TestClass]
     public class ExcelFilesManagerTest
     {
-        private ExcelFilesManager _excelFileManager = new ExcelFilesManager(@"D:\SUPINFO\STAGE\TonicTeaching\TONIC-certificate-generator\contact.xlsx");
+        private ExcelFilesManager _excelFileManager = new ExcelFilesManager();
         private Mock<IExcelFilesManager> _excelFileManagerMock;
 
         [TestInitialize]
         public void Initialize()
         {
+            _excelFileManager.SetSourceFile(@"D:\SUPINFO\STAGE\TonicTeaching\TONIC-certificate-generator\contact.xlsx");
             _excelFileManagerMock = new Mock<IExcelFilesManager>();
             _excelFileManagerMock
                 .Setup(x => x.GetContacts())

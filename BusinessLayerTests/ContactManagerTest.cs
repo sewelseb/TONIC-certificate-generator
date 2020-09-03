@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection.Metadata;
 using BusinessLayer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Models;
 using Moq;
 
 namespace BusinessLayerTests
@@ -13,17 +17,7 @@ namespace BusinessLayerTests
         public void Initialize()
         {
             _contactManagerMock =  new Mock<IContactManager>();
-            _contactManagerMock.Setup(x => x.LoadContacts()).Returns("");
         }
-
-        // To delete after
-        [TestMethod]
-        public void LoadContacts_ShouldReturnAString()
-        {
-            var actual = _contactManagerMock.Object.LoadContacts();
-            Assert.IsInstanceOfType(actual, typeof(string));
-        }
-
 
     }
 }

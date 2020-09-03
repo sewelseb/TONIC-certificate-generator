@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Models;
@@ -7,22 +8,35 @@ namespace DataAccessLayer
 {
     public class ExcelFilesManager : IExcelFilesManager
     {
-        private string _path;
         private SpreadsheetDocument _document;
         private WorkbookPart _wbPart;
         private List<Contact> _contacts;
 
-        public ExcelFilesManager(string filePath)
+        public ExcelFilesManager()
         {
-            _path = filePath;
-            _document = SpreadsheetDocument.Open(_path, false);
-            _wbPart = _document.WorkbookPart;
             _contacts = new List<Contact>();
         }
+
+        public bool SetSourceFile(string path)
+        {
+            if (File.Exists(path))
+            {
+                _document = SpreadsheetDocument.Open(path, false);
+                _wbPart = _document.WorkbookPart;
+                return true;
+            }
+
+            return false;
+        }
+
 
         // Only for 3 column excel file. Have to modify GetContact method to separate the string separation logic 
         public List<Contact> GetContacts()
         {
+            if (_document == null)
+            {
+                throw new FileNotFoundException();
+            }
             // Get the 'first' sheet
             Sheet theSheet = _wbPart.Workbook.Sheets.GetFirstChild<Sheet>();
             // Retrieve a reference to the worksheet part.
