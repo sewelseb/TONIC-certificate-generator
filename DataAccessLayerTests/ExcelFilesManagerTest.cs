@@ -15,7 +15,7 @@ namespace DataAccessLayerTests
         [TestInitialize]
         public void Initialize()
         {
-            _excelFileManager.SetSourceFile(@"D:\SUPINFO\STAGE\TonicTeaching\TONIC-certificate-generator\contact.xlsx");
+            _excelFileManager.SetSourceFile("testFiles/contact.xlsx");
             _excelFileManagerMock = new Mock<IExcelFilesManager>();
             _excelFileManagerMock
                 .Setup(x => x.GetContacts())
