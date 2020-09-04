@@ -14,7 +14,7 @@ namespace DataAccessLayer
 
         public void SetSourceFile(string path)
         {
-            if (File.Exists(path)) throw new FileNotFoundException();
+            if (!File.Exists(path)) throw new FileNotFoundException();
 
             _document = SpreadsheetDocument.Open(path, false);
             _workbookPart = _document.WorkbookPart;
