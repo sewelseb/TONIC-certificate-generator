@@ -27,10 +27,8 @@ namespace DataAccessLayer
             if (_document == null) throw new FileNotFoundException();
 
             var contacts = new List<Contact>();
-            // Get the 'first' sheet
-            var theSheet = _workbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
-            // Retrieve a reference to the worksheet part.
-            var worksheet = (_workbookPart.GetPartById(theSheet.Id.Value) as WorksheetPart).Worksheet;
+            var sheet = GetSheetFromWorkbook();
+            var worksheet = GetWorksheetFromSheet(sheet);
 
             var rows = worksheet.GetFirstChild<SheetData>().Descendants<Row>();
             rows = rows.Where(row => row.RowIndex != 1);
@@ -40,13 +38,23 @@ namespace DataAccessLayer
             return contacts;
         }
 
-        private static void ExtractData(IEnumerable<Row> rows, List<Contact> contacts)
+        private Sheet GetSheetFromWorkbook()
+        {
+            return _workbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
+        }
+
+        private Worksheet GetWorksheetFromSheet(Sheet theSheet)
+        {
+            return (_workbookPart.GetPartById(theSheet.Id.Value) as WorksheetPart).Worksheet;
+        }
+
+        private void ExtractData(IEnumerable<Row> rows, List<Contact> contacts)
         {
             foreach (var row in rows)
             {
                 var cellList = row.Descendants<Cell>().ToList();
-                var name = $"{cellList[0]} {cellList[1]}";
-                var mail = $"{cellList[2]}";
+                var name = $"{GetCellValue(cellList[0])} {GetCellValue(cellList[1])}";
+                var mail = $"{GetCellValue(cellList[2])}";
                 contacts.Add(new Contact {Name = name, Mail = mail});
             }
         }

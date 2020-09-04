@@ -17,7 +17,6 @@ namespace TonicCertificateGenerator
         {
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IContactManager, ContactManager>()
-                .AddSingleton<ISendinBlueConnector, SendinBlueConnector>()
                 .AddSingleton<IExcelFilesManager, ExcelFilesManager>()
                 .AddSingleton<ITemplateManager, WordTemplateManager>();
 

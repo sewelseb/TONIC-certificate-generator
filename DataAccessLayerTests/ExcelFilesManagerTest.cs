@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.IO;
 using DataAccessLayer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
@@ -15,7 +16,6 @@ namespace DataAccessLayerTests
         [TestInitialize]
         public void Initialize()
         {
-            _excelFileManager.SetSourceFile("testFiles/contact.xlsx");
             _excelFileManagerMock = new Mock<IExcelFilesManager>();
             _excelFileManagerMock
                 .Setup(x => x.GetContacts())
@@ -23,10 +23,18 @@ namespace DataAccessLayerTests
         }
 
         [TestMethod]
-        public void LoadExcel_ShouldReturnAContactList()
+        public void GetContact_ShouldReturnAContactList()
         {
+            _excelFileManager.SetSourceFile("testFiles/contact.xlsx");
             var actualList = _excelFileManager.GetContacts();
             Assert.IsInstanceOfType(actualList, typeof(List<Contact>));
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(FileNotFoundException))]
+        public void SetSourceFile_ShouldThrowFileNotFoundException()
+        {
+            _excelFileManager.SetSourceFile("wrongPath");
         }
     }
 }
