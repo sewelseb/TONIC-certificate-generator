@@ -17,7 +17,7 @@ namespace BusinessLayer
 
         public void SetSourceFile(string path)
         {
-            var source = _excelFilesManager.SetSourceFile(path);
+            _excelFilesManager.SetSourceFile(path);
         }
 
         public void SetTemplateFile(string path)
@@ -30,11 +30,12 @@ namespace BusinessLayer
             _templateManager.SetOutputDir(path);
         }
 
-        public Dictionary<Contact, string> GetDocumentForAllContacts()
+        public List<KeyValuePair<Contact, string>> GetDocumentForAllContacts()
         {
-            var contactsDocuments = new Dictionary<Contact, string>();
+            var contactsDocuments = new List<KeyValuePair<Contact, string>>();
             var contacts = _excelFilesManager.GetContacts();
-            foreach (var contact in contacts) contactsDocuments.Add(contact, GetDocumentForContact(contact));
+            foreach (var contact in contacts)
+                contactsDocuments.Add(new KeyValuePair<Contact, string>(contact, GetDocumentForContact(contact)));
 
             return contactsDocuments;
         }

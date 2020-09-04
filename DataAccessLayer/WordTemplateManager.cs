@@ -13,8 +13,8 @@ namespace DataAccessLayer
 
         public string GetTemplateFromContact(string replaced, Contact contact)
         {
-            _currentFileName = contact.mail + ".docx";
-            return ReplaceKey(replaced, contact.names);
+            _currentFileName = contact.Mail + ".docx";
+            return ReplaceKey(replaced, contact.Name);
         }
 
         public bool SetTemplateFile(string path)
