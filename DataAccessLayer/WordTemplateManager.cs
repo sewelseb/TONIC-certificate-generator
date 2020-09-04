@@ -1,9 +1,5 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text.RegularExpressions;
-using Aspose.Words;
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Packaging;
 using Models;
 
@@ -11,9 +7,9 @@ namespace DataAccessLayer
 {
     public class WordTemplateManager : ITemplateManager
     {
-        private string _templatePath;
-        private string _outputDir;
         private string _currentFileName;
+        private string _outputDir;
+        private string _templatePath;
 
         public string GetTemplateFromContact(string replaced, Contact contact)
         {
@@ -42,30 +38,29 @@ namespace DataAccessLayer
             if (_templatePath == null) throw new FileNotFoundException("Template not found");
             if (_outputDir == null) throw new DirectoryNotFoundException("Output directory not found");
 
-            File.Copy(_templatePath, System.IO.Path.Combine(_outputDir, _currentFileName), true);
+            File.Copy(_templatePath, Path.Combine(_outputDir, _currentFileName), true);
 
-            WordprocessingDocument wordDocument = WordprocessingDocument.Open(_templatePath, false);
+            var wordDocument = WordprocessingDocument.Open(_templatePath, false);
             var body = wordDocument.MainDocumentPart.Document.Body;
             string docText = null;
-            using (StreamReader sr = new StreamReader(wordDocument.MainDocumentPart.GetStream()))
+            using (var sr = new StreamReader(wordDocument.MainDocumentPart.GetStream()))
             {
                 docText = sr.ReadToEnd();
             }
+
             wordDocument.Close();
-            Regex regexText = new Regex(pattern);
+            var regexText = new Regex(pattern);
             docText = regexText.Replace(docText, value);
-            using (WordprocessingDocument cloneDocument =
-                WordprocessingDocument.Open(System.IO.Path.Combine(_outputDir, _currentFileName), true))
+            using (var cloneDocument =
+                WordprocessingDocument.Open(Path.Combine(_outputDir, _currentFileName), true))
             {
-                using (StreamWriter sw = new StreamWriter(cloneDocument.MainDocumentPart.GetStream(FileMode.Create)))
+                using (var sw = new StreamWriter(cloneDocument.MainDocumentPart.GetStream(FileMode.Create)))
                 {
                     sw.Write(docText);
                 }
             }
 
-            return System.IO.Path.Combine(_outputDir, _currentFileName);
-
+            return Path.Combine(_outputDir, _currentFileName);
         }
-
     }
 }

@@ -1,15 +1,15 @@
+using System.Collections.Generic;
 using DataAccessLayer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using Moq;
-using System.Collections.Generic;
 
 namespace DataAccessLayerTests
 {
     [TestClass]
     public class ExcelFilesManagerTest
     {
-        private ExcelFilesManager _excelFileManager = new ExcelFilesManager();
+        private readonly ExcelFilesManager _excelFileManager = new ExcelFilesManager();
         private Mock<IExcelFilesManager> _excelFileManagerMock;
 
         [TestInitialize]
@@ -21,14 +21,13 @@ namespace DataAccessLayerTests
                 .Setup(x => x.GetContacts())
                 .Returns(new List<Contact>());
         }
-        
+
         [TestMethod]
         public void LoadExcel_ShouldReturnAContactList()
         {
             //List<Contact> actualList = _excelFileManagerMock.Object.GetContacts();
-            List<Contact> actualList = _excelFileManager.GetContacts();
+            var actualList = _excelFileManager.GetContacts();
             Assert.IsInstanceOfType(actualList, typeof(List<Contact>));
         }
-
     }
 }

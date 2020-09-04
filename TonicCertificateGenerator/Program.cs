@@ -1,14 +1,13 @@
 ﻿using System;
-using System.IO;
 using BusinessLayer;
 using DataAccessLayer;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace TonicCertificateGenerator
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             SetupServices();
             Console.WriteLine("Hello World!");
@@ -28,9 +27,6 @@ namespace TonicCertificateGenerator
             contactManager.SetTemplateFile(@"F:\pierr\Projet\TONIC-certificate-generator\WordTest.docx");
             contactManager.SetOutputDir(@"F:\pierr\Projet\TONIC-certificate-generator\output");
             var contactsDocuments = contactManager.GetDocumentForAllContacts();
-
-
-
         }
     }
 }

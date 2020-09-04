@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DocumentFormat.OpenXml.Packaging;
+﻿using System.Collections.Generic;
 using Models;
 
 namespace BusinessLayer
@@ -11,6 +9,5 @@ namespace BusinessLayer
         void SetTemplateFile(string path);
         void SetOutputDir(string path);
         Dictionary<Contact, string> GetDocumentForAllContacts();
-
     }
 }

@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using Aspose.Words;
+﻿using System.Collections.Generic;
 using DataAccessLayer;
-using DocumentFormat.OpenXml.Packaging;
 using Models;
 
 namespace BusinessLayer
 {
     public class ContactManager : IContactManager
     {
-        private IExcelFilesManager _excelFilesManager;
-        private ITemplateManager _templateManager;
+        private readonly IExcelFilesManager _excelFilesManager;
+        private readonly ITemplateManager _templateManager;
+
+        public ContactManager(IExcelFilesManager excelFilesManager, ITemplateManager templateManager)
+        {
+            _excelFilesManager = excelFilesManager;
+            _templateManager = templateManager;
+        }
 
         public void SetSourceFile(string path)
         {
             var source = _excelFilesManager.SetSourceFile(path);
-
         }
+
         public void SetTemplateFile(string path)
         {
             _templateManager.SetTemplateFile(path);
@@ -28,20 +30,11 @@ namespace BusinessLayer
             _templateManager.SetOutputDir(path);
         }
 
-        public ContactManager(IExcelFilesManager excelFilesManager, ITemplateManager templateManager)
-        {
-            _excelFilesManager = excelFilesManager;
-            _templateManager = templateManager;
-        }
-
         public Dictionary<Contact, string> GetDocumentForAllContacts()
         {
             var contactsDocuments = new Dictionary<Contact, string>();
             var contacts = _excelFilesManager.GetContacts();
-            foreach (var contact in contacts)
-            {
-                contactsDocuments.Add(contact, GetDocumentForContact(contact));
-            }
+            foreach (var contact in contacts) contactsDocuments.Add(contact, GetDocumentForContact(contact));
 
             return contactsDocuments;
         }
