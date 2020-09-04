@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspose.Words" Version="20.8.0" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.11.3" />
   </ItemGroup>
 

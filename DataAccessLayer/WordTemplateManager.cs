@@ -17,20 +17,18 @@ namespace DataAccessLayer
             return ReplaceKey(replaced, contact.Name);
         }
 
-        public bool SetTemplateFile(string path)
+        public void SetTemplateFile(string path)
         {
-            if (!File.Exists(path)) return false;
+            if (!File.Exists(path)) throw new FileNotFoundException();
 
             _templatePath = path;
-            return true;
         }
 
-        public bool SetOutputDir(string path)
+        public void SetOutputDir(string path)
         {
-            if (!Directory.Exists(path)) return false;
+            if (!Directory.Exists(path)) throw new DirectoryNotFoundException();
 
             _outputDir = path;
-            return true;
         }
 
         private string ReplaceKey(string pattern, string value)
@@ -39,9 +37,7 @@ namespace DataAccessLayer
             if (_outputDir == null) throw new DirectoryNotFoundException("Output directory not found");
 
             File.Copy(_templatePath, Path.Combine(_outputDir, _currentFileName), true);
-
             var wordDocument = WordprocessingDocument.Open(_templatePath, false);
-            var body = wordDocument.MainDocumentPart.Document.Body;
             string docText = null;
             using (var sr = new StreamReader(wordDocument.MainDocumentPart.GetStream()))
             {
@@ -49,18 +45,21 @@ namespace DataAccessLayer
             }
 
             wordDocument.Close();
-            var regexText = new Regex(pattern);
-            docText = regexText.Replace(docText, value);
-            using (var cloneDocument =
-                WordprocessingDocument.Open(Path.Combine(_outputDir, _currentFileName), true))
-            {
-                using (var sw = new StreamWriter(cloneDocument.MainDocumentPart.GetStream(FileMode.Create)))
-                {
-                    sw.Write(docText);
-                }
-            }
+            ReplaceTextWithPattern(pattern, value, docText);
 
             return Path.Combine(_outputDir, _currentFileName);
+        }
+
+        private void ReplaceTextWithPattern(string pattern, string value, string docText)
+        {
+            var regexText = new Regex(pattern);
+            docText = regexText.Replace(docText, value);
+            using var cloneDocument =
+                WordprocessingDocument.Open(Path.Combine(_outputDir, _currentFileName), true);
+            using (var sw = new StreamWriter(cloneDocument.MainDocumentPart.GetStream(FileMode.Create)))
+            {
+                sw.Write(docText);
+            }
         }
     }
 }

@@ -25,7 +25,6 @@ namespace DataAccessLayerTests
         [TestMethod]
         public void LoadExcel_ShouldReturnAContactList()
         {
-            //List<Contact> actualList = _excelFileManagerMock.Object.GetContacts();
             var actualList = _excelFileManager.GetContacts();
             Assert.IsInstanceOfType(actualList, typeof(List<Contact>));
         }

@@ -12,7 +12,7 @@ namespace DataAccessLayer
         /// <returns>The Path of the created file</returns>
         string GetTemplateFromContact(string replaced, Contact contact);
 
-        bool SetTemplateFile(string path);
-        bool SetOutputDir(string path);
+        void SetTemplateFile(string path);
+        void SetOutputDir(string path);
     }
 }

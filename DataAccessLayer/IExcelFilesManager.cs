@@ -6,6 +6,6 @@ namespace DataAccessLayer
     public interface IExcelFilesManager
     {
         List<Contact> GetContacts();
-        bool SetSourceFile(string path);
+        void SetSourceFile(string path);
     }
 }

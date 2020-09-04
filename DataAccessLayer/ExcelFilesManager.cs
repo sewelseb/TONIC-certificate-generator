@@ -10,15 +10,14 @@ namespace DataAccessLayer
     public class ExcelFilesManager : IExcelFilesManager
     {
         private SpreadsheetDocument _document;
-        private WorkbookPart _wbPart;
+        private WorkbookPart _workbookPart;
 
-        public bool SetSourceFile(string path)
+        public void SetSourceFile(string path)
         {
             if (File.Exists(path)) throw new FileNotFoundException();
 
             _document = SpreadsheetDocument.Open(path, false);
-            _wbPart = _document.WorkbookPart;
-            return true;
+            _workbookPart = _document.WorkbookPart;
         }
 
 
@@ -29,11 +28,11 @@ namespace DataAccessLayer
 
             var contacts = new List<Contact>();
             // Get the 'first' sheet
-            var theSheet = _wbPart.Workbook.Sheets.GetFirstChild<Sheet>();
+            var theSheet = _workbookPart.Workbook.Sheets.GetFirstChild<Sheet>();
             // Retrieve a reference to the worksheet part.
-            var wsPart = (_wbPart.GetPartById(theSheet.Id.Value) as WorksheetPart).Worksheet;
+            var worksheet = (_workbookPart.GetPartById(theSheet.Id.Value) as WorksheetPart).Worksheet;
 
-            var rows = wsPart.GetFirstChild<SheetData>().Descendants<Row>();
+            var rows = worksheet.GetFirstChild<SheetData>().Descendants<Row>();
             rows = rows.Where(row => row.RowIndex != 1);
 
             ExtractData(rows, contacts);
@@ -57,7 +56,7 @@ namespace DataAccessLayer
         {
             var value = cell.CellValue.InnerText;
             if (cell.DataType != null && cell.DataType.Value == CellValues.SharedString)
-                return _wbPart.SharedStringTablePart.SharedStringTable.ChildElements.GetItem(int.Parse(value))
+                return _workbookPart.SharedStringTablePart.SharedStringTable.ChildElements.GetItem(int.Parse(value))
                     .InnerText;
             return value;
         }
