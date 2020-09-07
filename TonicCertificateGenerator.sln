@@ -11,9 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "DataAcce
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayerTests", "BusinessLayerTests\BusinessLayerTests.csproj", "{979AF133-8CBA-499E-A13B-8AABA0665780}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayerTests", "DataAccessLayerTests\DataAccessLayerTests.csproj", "{61AA6C91-0318-4E4D-91C2-3E65FAE06829}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayerTests", "DataAccessLayerTests\DataAccessLayerTests.csproj", "{61AA6C91-0318-4E4D-91C2-3E65FAE06829}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Models\Models.csproj", "{57EA1E82-1BFC-4C2B-90B4-36EE7D56309B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Models", "Models\Models.csproj", "{57EA1E82-1BFC-4C2B-90B4-36EE7D56309B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -36,5 +36,16 @@ namespace DataAccessLayerTests
         {
             _excelFileManager.SetSourceFile("wrongPath");
         }
+
+
+        [TestMethod]
+        public void GetContact_ShouldReturnAFillString()
+        {
+            var actualList = _excelFileManager.GetContacts();
+            Assert.IsTrue(actualList[0].Mail.Length >= 0 && actualList[0].Name.Length >= 0);
+        }
+
+
+
     }
 }
