@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
-using System.Text;
+using Models;
 
 namespace DataAccessLayer
 {
     public interface IExcelFilesManager
     {
-        string GetClients();
+        List<Contact> GetContacts();
+        void SetSourceFile(string path);
     }
 }

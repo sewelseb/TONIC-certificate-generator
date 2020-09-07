@@ -5,23 +5,27 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace TonicCertificateGenerator
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             SetupServices();
-
             Console.WriteLine("Hello World!");
         }
 
         private static void SetupServices()
         {
-            var serviceProvider = new ServiceCollection()
+            var serviceCollection = new ServiceCollection()
                 .AddSingleton<IContactManager, ContactManager>()
-                .AddSingleton<ISendinBlueConnector, SendinBlueConnector>()
-                .AddSingleton<IExcelFilesManager, ExcelFilesManager>();
+                .AddSingleton<IExcelFilesManager, ExcelFilesManager>()
+                .AddSingleton<ITemplateManager, WordTemplateManager>();
 
-            serviceProvider.BuildServiceProvider();
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var contactManager = (IContactManager) serviceProvider.GetService(typeof(IContactManager));
+            contactManager.SetSourceFile(@"F:\pierr\Projet\TONIC-certificate-generator\contact.xlsx");
+            contactManager.SetTemplateFile(@"F:\pierr\Projet\TONIC-certificate-generator\WordTest.docx");
+            contactManager.SetOutputDir(@"F:\pierr\Projet\TONIC-certificate-generator\output");
+            var contactsDocuments = contactManager.GetDocumentForAllContacts();
         }
     }
 }

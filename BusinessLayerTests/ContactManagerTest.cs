@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using BusinessLayer;
 using DataAccessLayer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Models;
 using Moq;
 
 namespace BusinessLayerTests
@@ -8,33 +10,43 @@ namespace BusinessLayerTests
     [TestClass]
     public class ContactManagerTest
     {
+        private readonly Mock<IExcelFilesManager> _excelFileManagerMock = new Mock<IExcelFilesManager>();
+        private readonly Mock<ITemplateManager> _templateManagerMock = new Mock<ITemplateManager>();
+        private Contact _contact;
         private IContactManager _contactManager;
-        private Mock<IExcelFilesManager> _excelFileManagerMock;
 
         [TestInitialize]
         public void Initialize()
         {
-            _excelFileManagerMock = new Mock<IExcelFilesManager>();
-            _excelFileManagerMock
-                .Setup(x => x.GetClients())
-                .Returns("Test");
-            _contactManager = new ContactManager(_excelFileManagerMock.Object);
+            _contact = new Contact {Mail = "test@test.com", Name = "Test Document"};
+            _templateManagerMock.Setup(x => x.GetTemplateFromContact("", _contact)).Returns("testFiles/WordTest.docx");
+            _excelFileManagerMock.Setup(x => x.GetContacts()).Returns(new List<Contact> {_contact});
+            _contactManager = new ContactManager(_excelFileManagerMock.Object, _templateManagerMock.Object);
         }
 
         [TestMethod]
-        public void LoadContacts_ShouldReturnAString()
+        public void GetDocumentForAllContacts_ShouldReturnListOfKeyValue()
         {
-            var actual = _contactManager.LoadContacts();
-
-            Assert.IsInstanceOfType(actual, typeof(string));
+            Assert.IsInstanceOfType(_contactManager.GetDocumentForAllContacts(),
+                typeof(List<KeyValuePair<Contact, string>>));
         }
 
         [TestMethod]
-        public void LoadContacts_ShouldGetContactFromExcelFileManager()
+        public void SetSourceFile_ShouldSetupSourceFile()
         {
-            var actual = _contactManager.LoadContacts();
+            _contactManager.SetSourceFile("testFiles/contact.xlsx");
+        }
 
-            _excelFileManagerMock.Verify(x => x.GetClients(), Times.Once);
+        [TestMethod]
+        public void SetOutputDir_ShouldSetupSetupDir()
+        {
+            _contactManager.SetOutputDir("testFiles");
+        }
+
+        [TestMethod]
+        public void SetTemplateFile_ShouldSetupTemplateFile()
+        {
+            _contactManager.SetTemplateFile("testFiles/WordTest.docx");
         }
     }
 }

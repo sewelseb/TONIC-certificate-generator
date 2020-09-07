@@ -1,7 +1,13 @@
-﻿namespace BusinessLayer
+﻿using System.Collections.Generic;
+using Models;
+
+namespace BusinessLayer
 {
     public interface IContactManager
     {
-        string LoadContacts();
+        void SetSourceFile(string path);
+        void SetTemplateFile(string path);
+        void SetOutputDir(string path);
+        List<KeyValuePair<Contact, string>> GetDocumentForAllContacts();
     }
 }
