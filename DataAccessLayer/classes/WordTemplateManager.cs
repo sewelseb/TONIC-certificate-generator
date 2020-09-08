@@ -1,20 +1,22 @@
 ﻿using System.IO;
 using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Packaging;
+using DocXToPdfConverter;
+using Microsoft.Extensions.Configuration;
 using Models;
 
 namespace DataAccessLayer
 {
     public class WordTemplateManager : ITemplateManager
     {
+        private readonly IConfigurationRoot _config;
         private string _currentFileName;
         private string _outputDir;
         private string _templatePath;
 
-        public string GetTemplateFromContact(string replaced, Contact contact)
+        public WordTemplateManager(IConfigurationRoot config)
         {
-            _currentFileName = contact.Mail + ".docx";
-            return ReplaceKey(replaced, contact.Name);
+            _config = config;
         }
 
         public void SetTemplateFile(string path)
@@ -31,12 +33,18 @@ namespace DataAccessLayer
             _outputDir = path;
         }
 
+        public string GetTemplateFromContact(Contact contact)
+        {
+            _currentFileName = contact.Mail;
+            return ReplaceKey(Regex.Escape(_config["KEYWORD_REPLACED"]), contact.Name);
+        }
+
         private string ReplaceKey(string pattern, string value)
         {
             if (_templatePath == null) throw new FileNotFoundException("Template not found");
             if (_outputDir == null) throw new DirectoryNotFoundException("Output directory not found");
 
-            File.Copy(_templatePath, Path.Combine(_outputDir, _currentFileName), true);
+            File.Copy(_templatePath, Path.Combine(_outputDir, _currentFileName + ".docx"), true);
             var wordDocument = WordprocessingDocument.Open(_templatePath, false);
             string docText = null;
             using (var sr = new StreamReader(wordDocument.MainDocumentPart.GetStream()))
@@ -47,7 +55,7 @@ namespace DataAccessLayer
             wordDocument.Close();
             ReplaceTextWithPattern(pattern, value, docText);
 
-            return Path.Combine(_outputDir, _currentFileName);
+            return Path.Combine(_outputDir, _currentFileName + ".pdf");
         }
 
         private void ReplaceTextWithPattern(string pattern, string value, string docText)
@@ -55,11 +63,22 @@ namespace DataAccessLayer
             var regexText = new Regex(pattern);
             docText = regexText.Replace(docText, value);
             using var cloneDocument =
-                WordprocessingDocument.Open(Path.Combine(_outputDir, _currentFileName), true);
+                WordprocessingDocument.Open(Path.Combine(_outputDir, _currentFileName + ".docx"), true);
             using (var sw = new StreamWriter(cloneDocument.MainDocumentPart.GetStream(FileMode.Create)))
             {
                 sw.Write(docText);
             }
+
+            cloneDocument.Close();
+
+            ExportToPDF();
+        }
+
+        public virtual void ExportToPDF()
+        {
+            var pdfOutput = Path.Combine(_outputDir, _currentFileName + ".pdf");
+            var converter = new ReportGenerator(_config["LIBREOFFICE_EXEC_PATH"]);
+            converter.Convert(Path.Combine(_outputDir, _currentFileName + ".docx"), pdfOutput);
         }
     }
 }

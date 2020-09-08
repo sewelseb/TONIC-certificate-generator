@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
@@ -27,43 +26,11 @@ namespace DataAccessLayer
 
         public string ApiKey { get; set; }
 
-        public void SendEmail()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SendEmailTest()
-        {
-            var apiInstance = new SMTPApi();
-            var getTemplate = apiInstance.GetSmtpTemplate(int.Parse(_config["TEMPLATE_ID"]));
-
-            var from = "melvin.leble@supinfo.com";
-            var to = "pierrevob@hotmail.com";
-            var mail = new MailMessage(from, to);
-            mail.Attachments.Add(new Attachment(@"F:\pierr\Projet\TONIC-certificate-generator\WordTest.docx"));
-
-            mail.Body = getTemplate.HtmlContent;
-            mail.IsBodyHtml = true;
-
-            _smtp.Send(mail);
-
-
-            /*var recipients = new List<SendSmtpEmailTo>
-            {
-                new SendSmtpEmailTo("pierrevob@hotmail.com"),
-                new SendSmtpEmailTo("melvin.leble@supinfo.com")
-            };
-            var content = "This is a test";
-            var sendSmtpEmail = new SendSmtpEmail(null, recipients, null, null, null, content);
-
-            var apiInstance = new SMTPApi();
-            var result = apiInstance.SendTransacEmail(sendSmtpEmail);*/
-        }
 
         public void SendEmailToContactWithAttachmnent(KeyValuePair<Contact, string> contactFilePathPair)
         {
             var apiInstance = new SMTPApi();
-            var getTemplate = apiInstance.GetSmtpTemplate(int.Parse(_config["TEMPLATE_ID"]));
+            var getTemplate = apiInstance.GetSmtpTemplate(int.Parse(_config["SMTP_TEMPLATE_ID"]));
             var from = _config["SMTP_LOGIN"];
             var to = contactFilePathPair.Key.Mail;
             var mail = new MailMessage(from, to);

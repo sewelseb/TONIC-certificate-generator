@@ -13,16 +13,14 @@ namespace TonicCertificateGenerator
         {
             var serviceProvider = SetupServices();
             var contactManager = (IContactManager) serviceProvider.GetService(typeof(IContactManager));
-            contactManager.SetSourceFile(
-                @"F:\pierr\Projet\TONIC-certificate-generator\TonicCertificateGenerator\contact.xlsx");
-            contactManager.SetTemplateFile(
-                @"F:\pierr\Projet\TONIC-certificate-generator\TonicCertificateGenerator\WordTest.docx");
-            contactManager.SetOutputDir(@"F:\pierr\Projet\TONIC-certificate-generator\output");
+            var config = (IConfigurationRoot) serviceProvider.GetService(typeof(IConfigurationRoot));
+            contactManager.SetSourceFile(config["SOURCE_PATH"]);
+            contactManager.SetTemplateFile(config["TEMPLATE_PATH"]);
+            contactManager.SetOutputDir(config["OUTPUT_DIR"]);
             var listContactFilepathPair = contactManager.GetDocumentForAllContacts();
             var mailManager = (IMailManager) serviceProvider.GetService(typeof(IMailManager));
             foreach (var contactFilepathPair in listContactFilepathPair)
                 mailManager.SendEmailToContactWithAttachmnent(contactFilepathPair);
-            Console.WriteLine("Hello World!");
         }
 
         private static IServiceProvider SetupServices()
