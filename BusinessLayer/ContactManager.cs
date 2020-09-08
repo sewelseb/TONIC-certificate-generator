@@ -42,7 +42,7 @@ namespace BusinessLayer
 
         private string GetDocumentForContact(Contact contact)
         {
-            return _templateManager.GetTemplateFromContact("name", contact);
+            return _templateManager.GetTemplateFromContact(contact);
         }
     }
 }

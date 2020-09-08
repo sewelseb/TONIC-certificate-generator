@@ -19,7 +19,7 @@ namespace BusinessLayerTests
         public void Initialize()
         {
             _contact = new Contact {Mail = "test@test.com", Name = "Test Document"};
-            _templateManagerMock.Setup(x => x.GetTemplateFromContact("", _contact)).Returns("testFiles/WordTest.docx");
+            _templateManagerMock.Setup(x => x.GetTemplateFromContact(_contact)).Returns("testFiles/WordTest.docx");
             _excelFileManagerMock.Setup(x => x.GetContacts()).Returns(new List<Contact> {_contact});
             _contactManager = new ContactManager(_excelFileManagerMock.Object, _templateManagerMock.Object);
         }
