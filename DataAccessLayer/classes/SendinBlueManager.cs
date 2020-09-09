@@ -37,14 +37,10 @@ namespace DataAccessLayer
             mail.Attachments.Add(new Attachment(contactFilePathPair.Value));
             var template = Template.Parse(getTemplate.HtmlContent);
             var result = template.Render(contactFilePathPair.Key);
+            mail.Subject = getTemplate.Subject;
             mail.Body = result;
             mail.IsBodyHtml = true;
             _smtp.Send(mail);
-        }
-
-        private bool getAccountConnection()
-        {
-            return true;
         }
     }
 }

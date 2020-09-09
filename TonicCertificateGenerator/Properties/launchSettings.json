@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TonicCertificateGenerator": {
+      "commandName": "Project",
+      "commandLineArgs": "-c appsettings.json"
+    }
+  }
+}
