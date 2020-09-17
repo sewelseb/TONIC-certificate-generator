@@ -27,13 +27,14 @@ namespace TonicCertificateGenerator
                 var mailManager = (IMailManager) serviceProvider.GetService(typeof(IMailManager));
                 foreach (var contactFilepathPair in listContactFilepathPair)
                     mailManager.SendEmailToContactWithAttachmnent(contactFilepathPair);
+                    
             });
         }
 
         private static IServiceProvider SetupServices(Options options)
         {
             var configuration = SetupConfiguration(options);
-            var logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            var logger = new LoggerConfiguration().WriteTo.Console().WriteTo.File("logs.txt").CreateLogger();
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IContactManager, ContactManager>()
                 .AddSingleton<IExcelFilesManager, ExcelFilesManager>()
