@@ -5,6 +5,7 @@ using CommandLine;
 using DataAccessLayer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace TonicCertificateGenerator
 {
@@ -23,20 +24,22 @@ namespace TonicCertificateGenerator
                 contactManager.SetTemplateFile(config["TEMPLATE_PATH"]);
                 contactManager.SetOutputDir(config["OUTPUT_DIR"]);
                 var listContactFilepathPair = contactManager.GetDocumentForAllContacts();
-                //var mailManager = (IMailManager) serviceProvider.GetService(typeof(IMailManager));
-                //foreach (var contactFilepathPair in listContactFilepathPair)
-                //    mailManager.SendEmailToContactWithAttachmnent(contactFilepathPair);
+                var mailManager = (IMailManager) serviceProvider.GetService(typeof(IMailManager));
+                foreach (var contactFilepathPair in listContactFilepathPair)
+                    mailManager.SendEmailToContactWithAttachmnent(contactFilepathPair);
             });
         }
 
         private static IServiceProvider SetupServices(Options options)
         {
             var configuration = SetupConfiguration(options);
+            var logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IContactManager, ContactManager>()
                 .AddSingleton<IExcelFilesManager, ExcelFilesManager>()
                 .AddSingleton<ITemplateManager, WordTemplateManager>()
                 .AddSingleton<IMailManager, SendinBlueManager>()
+                .AddSingleton<ILogger>(logger)
                 .AddSingleton(configuration);
 
             return serviceCollection.BuildServiceProvider();

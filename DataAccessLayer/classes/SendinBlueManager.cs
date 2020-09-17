@@ -4,6 +4,7 @@ using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using Models;
 using Scriban;
+using Serilog;
 using sib_api_v3_sdk.Api;
 using sib_api_v3_sdk.Client;
 
@@ -12,11 +13,13 @@ namespace DataAccessLayer
     public class SendinBlueManager : IMailManager
     {
         private readonly IConfigurationRoot _config;
+        private readonly ILogger _logger;
         private readonly SmtpClient _smtp;
 
-        public SendinBlueManager(IConfigurationRoot config)
+        public SendinBlueManager(IConfigurationRoot config, ILogger logger)
         {
             _config = config;
+            _logger = logger;
             ApiKey = _config["MAIL_API_KEY"];
             Configuration.Default.ApiKey.Add("api-key", ApiKey);
             _smtp = new SmtpClient(_config["SMTP_SERVER"], int.Parse(_config["SMTP_PORT"]));
@@ -41,6 +44,7 @@ namespace DataAccessLayer
             mail.Body = result;
             mail.IsBodyHtml = true;
             _smtp.Send(mail);
+            _logger.Information("Sending email to {name} [{email}]", contactFilePathPair.Key.Name, to);
         }
     }
 }

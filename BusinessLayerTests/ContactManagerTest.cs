@@ -4,6 +4,7 @@ using DataAccessLayer;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Models;
 using Moq;
+using Serilog;
 
 namespace BusinessLayerTests
 {
@@ -21,7 +22,8 @@ namespace BusinessLayerTests
             _contact = new Contact {Mail = "test@test.com", Name = "Test Document"};
             _templateManagerMock.Setup(x => x.GetTemplateFromContact(_contact)).Returns("testFiles/WordTest.docx");
             _excelFileManagerMock.Setup(x => x.GetContacts()).Returns(new List<Contact> {_contact});
-            _contactManager = new ContactManager(_excelFileManagerMock.Object, _templateManagerMock.Object);
+            var logger = new LoggerConfiguration().CreateLogger();
+            _contactManager = new ContactManager(_excelFileManagerMock.Object, _templateManagerMock.Object, logger);
         }
 
         [TestMethod]
