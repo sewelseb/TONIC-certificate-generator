@@ -4,10 +4,8 @@ namespace BusinessLayer
 {
     public interface IInventoryManager
     {
-        int GetLastSerialNumber();
+        long GetLastSerialNumber();
 
         void AddSerialNumber(Contact contact);
-
-
     }
 }
