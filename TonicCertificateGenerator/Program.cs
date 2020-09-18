@@ -27,7 +27,6 @@ namespace TonicCertificateGenerator
                 var mailManager = (IMailManager) serviceProvider.GetService(typeof(IMailManager));
                 foreach (var contactFilepathPair in listContactFilepathPair)
                     mailManager.SendEmailToContactWithAttachmnent(contactFilepathPair);
-                    
             });
         }
 
@@ -40,6 +39,7 @@ namespace TonicCertificateGenerator
                 .AddSingleton<IExcelFilesManager, ExcelFilesManager>()
                 .AddSingleton<ITemplateManager, WordTemplateManager>()
                 .AddSingleton<IMailManager, SendinBlueManager>()
+                .AddSingleton<IInventoryManager, InventoryCsvManager>()
                 .AddSingleton<ILogger>(logger)
                 .AddSingleton(configuration);
 

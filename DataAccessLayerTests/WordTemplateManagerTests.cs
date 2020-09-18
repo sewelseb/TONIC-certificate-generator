@@ -18,7 +18,7 @@ namespace BusinessLayer.Tests
         public void Initialize()
         {
             var configMock = new Mock<IConfigurationRoot>();
-            configMock.SetupGet(x => x["KEYWORD_REPLACED"]).Returns("Test Document");
+            configMock.SetupGet(x => x["KEYWORD_REPLACED_NAME"]).Returns("Test Document");
             _mockedConfig = configMock.Object;
             _wordTemplateManager = new WordTemplateManager(_mockedConfig);
         }

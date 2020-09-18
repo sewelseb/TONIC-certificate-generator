@@ -6,6 +6,6 @@ namespace BusinessLayer
     {
         long GetLastSerialNumber();
 
-        void AddSerialNumber(Contact contact);
+        Contact AddSerialNumber(Contact contact);
     }
 }

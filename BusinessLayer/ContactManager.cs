@@ -8,14 +8,17 @@ namespace BusinessLayer
     public class ContactManager : IContactManager
     {
         private readonly IExcelFilesManager _excelFilesManager;
+        private readonly IInventoryManager _inventoryManager;
         private readonly ILogger _logger;
         private readonly ITemplateManager _templateManager;
 
-        public ContactManager(IExcelFilesManager excelFilesManager, ITemplateManager templateManager, ILogger logger)
+        public ContactManager(IExcelFilesManager excelFilesManager, ITemplateManager templateManager,
+            IInventoryManager inventoryManager, ILogger logger)
         {
             _excelFilesManager = excelFilesManager;
             _templateManager = templateManager;
             _logger = logger;
+            _inventoryManager = inventoryManager;
         }
 
         public void SetSourceFile(string path)
@@ -42,8 +45,10 @@ namespace BusinessLayer
             var contacts = _excelFilesManager.GetContacts();
             foreach (var contact in contacts)
             {
-                contactsDocuments.Add(new KeyValuePair<Contact, string>(contact, GetDocumentForContact(contact)));
-                _logger.Information($"Template successfuly generated for {contact.Name} / {contact.Mail}");
+                var newContact = _inventoryManager.AddSerialNumber(contact);
+                contactsDocuments.Add(new KeyValuePair<Contact, string>(newContact, GetDocumentForContact(newContact)));
+                _logger.Information(
+                    $"Template successfuly generated for {newContact.Name} / {newContact.Mail} / {newContact.SerialNumber}");
             }
 
             return contactsDocuments;

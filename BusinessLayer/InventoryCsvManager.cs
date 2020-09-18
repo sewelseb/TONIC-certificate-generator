@@ -20,7 +20,7 @@ namespace BusinessLayer
             _logger = logger;
         }
 
-        public void AddSerialNumber(Contact contact)
+        public Contact AddSerialNumber(Contact contact)
         {
             var current = GetLastSerialNumber() + 1;
             using (var sw = new StreamWriter(_config["INVENTORY_PATH"], true))
@@ -29,6 +29,9 @@ namespace BusinessLayer
                            DateTime.Now.ToString("dd-MM-yyyy");
                 sw.Write(line);
             }
+
+            contact.SerialNumber = current;
+            return contact;
         }
 
         public long GetLastSerialNumber()

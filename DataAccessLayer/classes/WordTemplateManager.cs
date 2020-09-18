@@ -36,10 +36,10 @@ namespace DataAccessLayer
         public string GetTemplateFromContact(Contact contact)
         {
             _currentFileName = contact.Mail;
-            return ReplaceKey(Regex.Escape(_config["KEYWORD_REPLACED"]), contact.Name);
+            return ReplaceKey(contact);
         }
 
-        private string ReplaceKey(string pattern, string value)
+        private string ReplaceKey(Contact contact)
         {
             if (_templatePath == null) throw new FileNotFoundException("Template not found");
             if (_outputDir == null) throw new DirectoryNotFoundException("Output directory not found");
@@ -53,15 +53,17 @@ namespace DataAccessLayer
             }
 
             wordDocument.Close();
-            ReplaceTextWithPattern(pattern, value, docText);
+            ReplaceTextWithPattern(docText, contact);
 
             return Path.Combine(_outputDir, _currentFileName + ".pdf");
         }
 
-        private void ReplaceTextWithPattern(string pattern, string value, string docText)
+        private void ReplaceTextWithPattern(string docText, Contact contact)
         {
-            var regexText = new Regex(pattern);
-            docText = regexText.Replace(docText, value);
+            var regexText = new Regex(Regex.Escape(_config["KEYWORD_REPLACED_NAME"]));
+            docText = regexText.Replace(docText, contact.Name);
+            regexText = new Regex(Regex.Escape(_config["KEYWORD_REPLACED_SERIAL"]));
+            docText = regexText.Replace(docText, contact.SerialNumber.ToString());
             using var cloneDocument =
                 WordprocessingDocument.Open(Path.Combine(_outputDir, _currentFileName + ".docx"), true);
             using (var sw = new StreamWriter(cloneDocument.MainDocumentPart.GetStream(FileMode.Create)))
