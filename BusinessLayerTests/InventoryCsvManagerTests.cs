@@ -38,10 +38,12 @@ namespace BusinessLayer.Tests
         public void AddSerialNumber_ShouldAddTheCorrectSerialNumber()
         {
             var contact = new Contact {Name = "Jean", Mail = "marcelle@jean.be"};
+
             _inventoryCsvManager.AddSerialNumber(contact);
             var _reverseStream = new ReverseLineReader(_mockedConfig["INVENTORY_PATH"]).Take(2);
             var current = _reverseStream.First().Split(',')[0];
             var previous = _reverseStream.Last().Split(',')[0];
+
             Assert.AreEqual(long.Parse(current), long.Parse(previous) + 1);
         }
     }
