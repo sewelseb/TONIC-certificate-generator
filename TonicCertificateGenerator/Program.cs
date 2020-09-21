@@ -24,9 +24,9 @@ namespace TonicCertificateGenerator
                 contactManager.SetTemplateFile(config["TEMPLATE_PATH"]);
                 contactManager.SetOutputDir(config["OUTPUT_DIR"]);
                 var listContactFilepathPair = contactManager.GetDocumentForAllContacts();
-                //var mailManager = (IMailManager) serviceProvider.GetService(typeof(IMailManager));
-                //foreach (var contactFilepathPair in listContactFilepathPair)
-                //    mailManager.SendEmailToContactWithAttachmnent(contactFilepathPair);
+                var mailManager = (IMailManager) serviceProvider.GetService(typeof(IMailManager));
+                foreach (var contactFilepathPair in listContactFilepathPair)
+                    mailManager.SendEmailToContactWithAttachmnent(contactFilepathPair);
             });
         }
 
