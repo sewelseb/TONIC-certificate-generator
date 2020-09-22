@@ -33,7 +33,7 @@ namespace BusinessLayer
             _logger.Information("Template file is set up.");
         }
 
-        public void SetOutputDir(string path)
+        public void SetOutputDirectoryForFiles(string path)
         {
             _templateManager.SetOutputDir(path);
             _logger.Information($"Output directory is set up at {path}");

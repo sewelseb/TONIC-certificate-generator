@@ -24,8 +24,8 @@ namespace BusinessLayer.Tests
             configMock.SetupGet(x => x["INVENTORY_PATH"])
                 .Returns(Path.Combine(Directory.GetCurrentDirectory(), "inventory.csv"));
             _mockedConfig = configMock.Object;
-            var mockLog = new Mock<ILogger>().Object;
-            _inventoryCsvManager = new InventoryCsvManager(_mockedConfig, mockLog);
+            var mockedLogger = new Mock<ILogger>().Object;
+            _inventoryCsvManager = new InventoryCsvManager(_mockedConfig, mockedLogger);
         }
 
         [TestMethod]

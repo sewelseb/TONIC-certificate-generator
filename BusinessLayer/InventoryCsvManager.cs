@@ -36,9 +36,14 @@ namespace BusinessLayer
         public long GetLastSerialNumber()
         {
             var reverseStream = new ReverseLineReader(_config["INVENTORY_PATH"]);
-            var last = long.Parse(reverseStream.Take(1).First().Split(",")[0]);
+            var last = ReturnSerialNumberFromLastLine(reverseStream);
             reverseStream.Close();
             return last;
+        }
+
+        private static long ReturnSerialNumberFromLastLine(ReverseLineReader reverseStream)
+        {
+            return long.Parse(reverseStream.Take(1).First().Split(",")[0]);
         }
     }
 }
