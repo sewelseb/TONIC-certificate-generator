@@ -22,7 +22,7 @@ namespace TonicCertificateGenerator
                 var config = (IConfigurationRoot) serviceProvider.GetService(typeof(IConfigurationRoot));
                 contactManager.SetSourceFile(config["SOURCE_PATH"]);
                 contactManager.SetTemplateFile(config["TEMPLATE_PATH"]);
-                contactManager.SetOutputDir(config["OUTPUT_DIR"]);
+                contactManager.SetOutputDirectoryForFiles(config["OUTPUT_DIR"]);
                 var listContactFilepathPair = contactManager.GetDocumentForAllContacts();
                 var mailManager = (IMailManager) serviceProvider.GetService(typeof(IMailManager));
                 foreach (var contactFilepathPair in listContactFilepathPair)

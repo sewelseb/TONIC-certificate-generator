@@ -12,9 +12,10 @@ namespace DataAccessLayer
 {
     public class SendinBlueManager : IMailManager
     {
+        public string ApiKey { get; set; }
         private readonly IConfigurationRoot _config;
         private readonly ILogger _logger;
-        private readonly SmtpClient _smtp;
+        private SmtpClient _smtp;
 
         public SendinBlueManager(IConfigurationRoot config, ILogger logger)
         {
@@ -22,13 +23,8 @@ namespace DataAccessLayer
             _logger = logger;
             ApiKey = _config["MAIL_API_KEY"];
             Configuration.Default.ApiKey.Add("api-key", ApiKey);
-            _smtp = new SmtpClient(_config["SMTP_SERVER"], int.Parse(_config["SMTP_PORT"]));
-            _smtp.EnableSsl = true;
-            _smtp.Credentials = new NetworkCredential(_config["SMTP_LOGIN"], _config["SMTP_PASSWORD"]);
+            ConfigureSmtpClient();
         }
-
-        public string ApiKey { get; set; }
-
 
         public void SendEmailToContactWithAttachmnent(KeyValuePair<Contact, string> contactFilePathPair)
         {
@@ -45,6 +41,13 @@ namespace DataAccessLayer
             mail.IsBodyHtml = true;
             _smtp.Send(mail);
             _logger.Information("Sending email to {name} [{email}]", contactFilePathPair.Key.Name, to);
+        }
+
+        private void ConfigureSmtpClient()
+        {
+            _smtp = new SmtpClient(_config["SMTP_SERVER"], int.Parse(_config["SMTP_PORT"]));
+            _smtp.EnableSsl = true;
+            _smtp.Credentials = new NetworkCredential(_config["SMTP_LOGIN"], _config["SMTP_PASSWORD"]);
         }
     }
 }

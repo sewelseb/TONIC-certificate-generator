@@ -41,8 +41,15 @@ namespace BusinessLayer
 
         public List<KeyValuePair<Contact, string>> GetDocumentForAllContacts()
         {
-            var contactsDocuments = new List<KeyValuePair<Contact, string>>();
             var contacts = _excelFilesManager.GetContacts();
+            var contactsDocuments = GenerateTemplates(contacts);
+
+            return contactsDocuments;
+        }
+
+        private List<KeyValuePair<Contact, string>> GenerateTemplates(List<Contact> contacts)
+        {
+            var contactsDocuments = new List<KeyValuePair<Contact, string>>();
             foreach (var contact in contacts)
             {
                 var newContact = _inventoryManager.AddSerialNumber(contact);

@@ -22,15 +22,14 @@ namespace BusinessLayer
 
         public Contact AddSerialNumber(Contact contact)
         {
-            var current = GetLastSerialNumber() + 1;
-            using (var sw = new StreamWriter(_config["INVENTORY_PATH"], true))
+            contact.SerialNumber = GetLastSerialNumber() + 1;
+            using (var streamWriter = new StreamWriter(_config["INVENTORY_PATH"], true))
             {
-                var line = "\n" + current + "," + contact.Name + "," + contact.Mail + "," +
+                var line = "\n" + contact.SerialNumber + "," + contact.Name + "," + contact.Mail + "," +
                            DateTime.Now.ToString("dd-MM-yyyy");
-                sw.Write(line);
+                streamWriter.Write(line);
             }
 
-            contact.SerialNumber = current;
             return contact;
         }
 
