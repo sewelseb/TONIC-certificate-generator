@@ -7,7 +7,7 @@ namespace BusinessLayer
     {
         void SetSourceFile(string path);
         void SetTemplateFile(string path);
-        void SetOutputDir(string path);
+        void SetOutputDirectoryForFiles(string path);
         List<KeyValuePair<Contact, string>> GetDocumentForAllContacts();
     }
 }

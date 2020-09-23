@@ -18,7 +18,8 @@ namespace BusinessLayer.Tests
         public void Initialize()
         {
             var configMock = new Mock<IConfigurationRoot>();
-            configMock.SetupGet(x => x["KEYWORD_REPLACED"]).Returns("Test Document");
+            configMock.SetupGet(x => x["KEYWORD_REPLACED_NAME"]).Returns("NameSurname");
+            configMock.SetupGet(x => x["KEYWORD_REPLACED_SERIAL"]).Returns("SerialNumber");
             _mockedConfig = configMock.Object;
             _wordTemplateManager = new WordTemplateManager(_mockedConfig);
         }
@@ -75,7 +76,7 @@ namespace BusinessLayer.Tests
         private string GetTextFromWordDoc()
         {
             _wordTemplateManager.GetTemplateFromContact(
-                new Contact {Mail = "test@test.com", Name = "Hello World"});
+                new Contact {Mail = "test@test.com", Name = "Hello World", SerialNumber=6100});
             var wordDocument = WordprocessingDocument.Open("testFiles/test@test.com.docx", false);
             string docText = null;
             using (var sr = new StreamReader(wordDocument.MainDocumentPart.GetStream()))
