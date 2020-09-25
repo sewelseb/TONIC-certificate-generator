@@ -20,6 +20,8 @@ namespace BusinessLayer.Tests
             var configMock = new Mock<IConfigurationRoot>();
             configMock.SetupGet(x => x["KEYWORD_REPLACED_NAME"]).Returns("NameSurname");
             configMock.SetupGet(x => x["KEYWORD_REPLACED_SERIAL"]).Returns("SerialNumber");
+            configMock.SetupGet(x => x["KEYWORD_REPLACED_CONFNAME"]).Returns("ConfName");
+            configMock.SetupGet(x => x["CONFERENCE_NAME"]).Returns("Entrepreneurship During CoVid19");
             _mockedConfig = configMock.Object;
             _wordTemplateManager = new WordTemplateManager(_mockedConfig);
         }

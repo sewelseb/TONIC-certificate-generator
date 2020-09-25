@@ -15,8 +15,6 @@ namespace BusinessLayer.Tests
         private InventoryCsvManager _inventoryCsvManager;
         private IConfigurationRoot _mockedConfig;
 
-        private List<Contact> contacts;
-
         [TestInitialize]
         public void Initialize()
         {
