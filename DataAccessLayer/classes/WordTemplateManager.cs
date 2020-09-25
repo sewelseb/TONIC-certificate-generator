@@ -64,6 +64,9 @@ namespace DataAccessLayer
             docText = regexText.Replace(docText, contact.Name);
             regexText = new Regex(Regex.Escape(_config["KEYWORD_REPLACED_SERIAL"]));
             docText = regexText.Replace(docText, contact.SerialNumber.ToString());
+            regexText = new Regex(Regex.Escape(_config["KEYWORD_REPLACED_CONFNAME"]));
+            docText = regexText.Replace(docText, _config["CONFERENCE_NAME"]);
+
             using var cloneDocument =
                 WordprocessingDocument.Open(Path.Combine(_outputDir, _currentFileName + ".docx"), true);
             using (var sw = new StreamWriter(cloneDocument.MainDocumentPart.GetStream(FileMode.Create)))

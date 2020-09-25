@@ -25,7 +25,7 @@ namespace BusinessLayer
             contact.SerialNumber = GetLastSerialNumber() + 1;
             using (var streamWriter = new StreamWriter(_config["INVENTORY_PATH"], true))
             {
-                var line = "\n" + contact.SerialNumber + "," + contact.Name + "," + contact.Mail + "," +
+                var line = "\n" + contact.SerialNumber + "," + contact.Name + "," + contact.Mail + "," + _config["CONFERENCE_NAME"] +
                            DateTime.Now.ToString("dd-MM-yyyy");
                 streamWriter.Write(line);
             }
