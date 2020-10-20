@@ -21,6 +21,10 @@ namespace BusinessLayer.Tests
             var configMock = new Mock<IConfigurationRoot>();
             configMock.SetupGet(x => x["INVENTORY_PATH"])
                 .Returns(Path.Combine(Directory.GetCurrentDirectory(), "inventoryTest.csv"));
+            configMock.SetupGet(x => x["CONFERENCE_NAME"])
+                .Returns("Conference test during a test");
+            configMock.SetupGet(x => x["CONFERENCE_DATE"])
+                .Returns("01-04-2019");
             _mockedConfig = configMock.Object;
             var mockedLogger = new Mock<ILogger>().Object;
             _inventoryCsvManager = new InventoryCsvManager(_mockedConfig, mockedLogger);
@@ -43,6 +47,18 @@ namespace BusinessLayer.Tests
             var previous = _reverseStream.Last().Split(',')[0];
 
             Assert.AreEqual(long.Parse(current), long.Parse(previous) + 1);
+        }
+
+        [TestMethod]
+        public void ShouldReturnANewLine()
+        {
+            var contact = new Contact { Name = "Jean", Mail = "marcelle@jean.be" };
+            _inventoryCsvManager.AddSerialNumber(contact);
+
+            var _reverseStream = new ReverseLineReader(_mockedConfig["INVENTORY_PATH"]).Take(2);
+            var inventory_name = _reverseStream.First().Split(',')[2];
+
+            Assert.AreEqual(contact.Name, inventory_name);
         }
     }
 }

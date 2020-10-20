@@ -1,4 +1,4 @@
-id,name,mail,date
+id,name,mail,date,conf_name,conf_date,issue_date
 200917000449,caillouxvob,cailloux@cailloux.cailloux,10-20-2020
 200917000450,rochervob,rocher@rocher.rocher,10-20-2020
 200917000451,pierrevob,pierre@pierre.pierre,10-20-2020
