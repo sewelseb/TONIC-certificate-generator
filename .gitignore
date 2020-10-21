@@ -342,3 +342,4 @@ healthchecksdb
 # Custom files
 output
 appsettings.json
+BusinessLayerTests/inventory.csv
