@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Packaging;
 using DocXToPdfConverter;
@@ -66,6 +67,10 @@ namespace DataAccessLayer
             docText = regexText.Replace(docText, contact.SerialNumber.ToString());
             regexText = new Regex(Regex.Escape(_config["KEYWORD_REPLACED_CONFNAME"]));
             docText = regexText.Replace(docText, _config["CONFERENCE_NAME"]);
+            regexText = new Regex(Regex.Escape(_config["KEYWORD_REPLACED_CONFDATE"]));
+            var Date = DateTime.Parse(_config["CONFERENCE_DATE"]);
+            var stringDate = Date.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("en-US"));
+            docText = regexText.Replace(docText, stringDate);
 
             using var cloneDocument =
                 WordprocessingDocument.Open(Path.Combine(_outputDir, _currentFileName + ".docx"), true);

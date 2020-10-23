@@ -21,7 +21,6 @@ namespace DataAccessLayer
         }
 
 
-        // Only for 3 column excel file. Have to modify GetContact method to separate the string separation logic 
         public List<Contact> GetContacts()
         {
             if (_document == null) throw new FileNotFoundException();
@@ -50,12 +49,27 @@ namespace DataAccessLayer
 
         private void ExtractData(IEnumerable<Row> rows, List<Contact> contacts)
         {
-            foreach (var row in rows)
+            var numberOfelements = rows.ToList().Count;
+            if(numberOfelements == 1)
             {
-                var cellList = row.Descendants<Cell>().ToList();
-                var name = $"{GetCellValue(cellList[0])} {GetCellValue(cellList[1])}";
-                var mail = $"{GetCellValue(cellList[2])}";
-                contacts.Add(new Contact {Name = name, Mail = mail});
+                var cellList = rows.FirstOrDefault().Descendants<Cell>().ToList();
+                var totalColumns = cellList.Count;
+                var name = totalColumns == 2 ? GetCellValue(cellList[0]) : $"{GetCellValue(cellList[0])} {GetCellValue(cellList[1])}";
+                var mail = totalColumns == 2 ? GetCellValue(cellList[1]) : $"{GetCellValue(cellList[2])}";
+                contacts.Add(new Contact { Name = name, Mail = mail });
+
+            }
+            else
+            {
+                foreach (var row in rows)
+                {
+                    var cellList = row.Descendants<Cell>().ToList();
+                    var totalColumns = cellList.Count;
+                    var name = totalColumns == 2 ? GetCellValue(cellList[0]) : $"{GetCellValue(cellList[0])} {GetCellValue(cellList[1])}";
+                    var mail = totalColumns == 2 ? GetCellValue(cellList[1]) : $"{GetCellValue(cellList[2])}";
+                    contacts.Add(new Contact { Name = name, Mail = mail });
+                }
+
             }
         }
 
@@ -68,5 +82,6 @@ namespace DataAccessLayer
                     .InnerText;
             return value;
         }
+
     }
 }
