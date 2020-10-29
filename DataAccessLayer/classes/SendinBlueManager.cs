@@ -46,6 +46,7 @@ namespace DataAccessLayer
             }
             catch (Exception e) {
                 _logger.Error($"Error while sending the email to {contactFilePathPair.Key.Mail}");
+                Console.WriteLine($"Error while sending the email to {contactFilePathPair.Key.Mail} : {e}" );
             }
         }
 
