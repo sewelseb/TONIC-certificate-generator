@@ -34,7 +34,7 @@ Le fichier "appsettings.json" possède un certain nombre de propriétés essenti
 	"KEYWORD_REPLACED_CONFNAME": "Keyword qui sera remplacé dans le template par le nom de la conférence",
 	"KEYWORD_REPLACED_CONFDATE": "Keyword qui sera remplacé dans le template par la date de la conférence",
 	"CONFERENCE_NAME": Nom de la conférence. Celui-ci remplacera le keyword de "KEYWORD_REPLACED_CONFNAME",
-	"CONFERENCE_DATE": Date de la conférence. Celui-ci remplacera le keyword de "KEYWORD_REPLACED_CONFDATE"
+	"CONFERENCE_DATE": Date de la conférence au format (dd-MM-yyyy, Exemple : '01-04-2019' sera pris en compte au lieu de '1-04-2019'). Celui-ci remplacera le keyword de "KEYWORD_REPLACED_CONFDATE"
 ```
 
 Un exemple de configuration de <a href="https://serilog.net/">Serilog</a> avec les propriétés suivantes dans "appsettings.json" :

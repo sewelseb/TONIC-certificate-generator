@@ -79,7 +79,7 @@ namespace BusinessLayer.Tests
         [TestMethod]
         public void DateShouldReturn1StApril2019()
         {
-            var Date = DateTime.Parse(_mockedConfig["CONFERENCE_DATE"]);
+            var Date = DateTime.ParseExact(_mockedConfig["CONFERENCE_DATE"],"dd-MM-yyyy",null);
             var stringDate = Date.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("en-US"));
             Assert.AreEqual(stringDate, "01 April 2019");
         }

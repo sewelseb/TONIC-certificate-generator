@@ -68,7 +68,7 @@ namespace DataAccessLayer
             regexText = new Regex(Regex.Escape(_config["KEYWORD_REPLACED_CONFNAME"]));
             docText = regexText.Replace(docText, _config["CONFERENCE_NAME"]);
             regexText = new Regex(Regex.Escape(_config["KEYWORD_REPLACED_CONFDATE"]));
-            var Date = DateTime.Parse(_config["CONFERENCE_DATE"]);
+            var Date = DateTime.ParseExact(_config["CONFERENCE_DATE"], "dd-MM-yyyy", null);
             var stringDate = Date.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("en-US"));
             docText = regexText.Replace(docText, stringDate);
 
