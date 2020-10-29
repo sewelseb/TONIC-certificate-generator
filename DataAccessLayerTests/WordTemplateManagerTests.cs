@@ -81,7 +81,7 @@ namespace BusinessLayer.Tests
         {
             var Date = DateTime.Parse(_mockedConfig["CONFERENCE_DATE"]);
             var stringDate = Date.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("en-US"));
-            Assert.IsTrue(stringDate == "01 April 2019");
+            Assert.IsTrue(stringDate == "01 April 2019" || stringDate == "01 april 2019");
         }
 
         #region NON TESTABLE METHODS
