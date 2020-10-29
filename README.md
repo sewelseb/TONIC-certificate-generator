@@ -39,40 +39,40 @@ Le fichier "appsettings.json" possède un certain nombre de propriétés essenti
 
 Un exemple de configuration de <a href="https://serilog.net/">Serilog</a> avec les propriétés suivantes dans "appsettings.json" :
 ```
-	"SerilogConf": {
-		"Using": [ "Serilog.Filters.Expressions" ],
-		"WriteTo": [
-			{ "Name": "Console" },
-			{
-				"Name": "File",
-				"Args": {
-					"path": "logs2.txt"
-				}
-			},
-			{
-				"Name": "Logger",
-				"Args": {
-					"configureLogger": {
-						"Filter": [
-							{
-								"Name": "ByIncludingOnly",
-								"Args": {
-									"expression": "@Level = 'Error'"
-								}
+"SerilogConf": {
+	"Using": [ "Serilog.Filters.Expressions" ],
+	"WriteTo": [
+		{ "Name": "Console" },
+		{
+			"Name": "File",
+			"Args": {
+				"path": "logs2.txt"
+			}
+		},
+		{
+			"Name": "Logger",
+			"Args": {
+				"configureLogger": {
+					"Filter": [
+						{
+							"Name": "ByIncludingOnly",
+							"Args": {
+								"expression": "@Level = 'Error'"
 							}
-						],
-						"WriteTo": [
-							{
-								"Name": "File",
-								"Args": {
-									"path": "logsError.txt"
-								}
+						}
+					],
+					"WriteTo": [
+						{
+							"Name": "File",
+							"Args": {
+								"path": "logsError.txt"
 							}
-						]
-					}
+						}
+					]
 				}
 			}
-		]
-	},
+		}
+	]
+},
 
 ```
