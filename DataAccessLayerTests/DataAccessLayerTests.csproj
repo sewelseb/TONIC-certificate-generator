@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -7,11 +7,23 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="testFiles\contact.xlsx" />
+    <None Remove="testFiles\contact2columns.xlsx" />
+    <None Remove="testFiles\contact2columnsWithEmailsError.xlsx" />
+    <None Remove="testFiles\contact3columns.xlsx" />
+    <None Remove="testFiles\contactWith1contact.xlsx" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="testFiles\contact.xlsx">
+    <Content Include="testFiles\contact2columnsWithEmailsError.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testFiles\contactWith1contact.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testFiles\contact2columns.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="testFiles\contact3columns.xlsx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

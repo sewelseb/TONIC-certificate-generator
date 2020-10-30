@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using DataAccessLayer;
 using DocumentFormat.OpenXml.Packaging;
 using Microsoft.Extensions.Configuration;
@@ -21,7 +22,9 @@ namespace BusinessLayer.Tests
             configMock.SetupGet(x => x["KEYWORD_REPLACED_NAME"]).Returns("NameSurname");
             configMock.SetupGet(x => x["KEYWORD_REPLACED_SERIAL"]).Returns("SerialNumber");
             configMock.SetupGet(x => x["KEYWORD_REPLACED_CONFNAME"]).Returns("ConfName");
+            configMock.SetupGet(x => x["KEYWORD_REPLACED_CONFDATE"]).Returns("ConfDate");
             configMock.SetupGet(x => x["CONFERENCE_NAME"]).Returns("Entrepreneurship During CoVid19");
+            configMock.SetupGet(x => x["CONFERENCE_DATE"]).Returns("01-04-2019");
             _mockedConfig = configMock.Object;
             _wordTemplateManager = new WordTemplateManager(_mockedConfig);
         }
@@ -69,12 +72,21 @@ namespace BusinessLayer.Tests
             _wordTemplateManager = mockManager.Object;
             _wordTemplateManager.SetOutputDir("testFiles/");
             _wordTemplateManager.SetTemplateFile("testFiles/WordTest.docx");
-
             var docText = GetTextFromWordDoc();
 
             Assert.IsTrue(docText.Contains("Hello World"));
         }
 
+        [TestMethod]
+        public void DateShouldReturn1StApril2019()
+        {
+            var Date = DateTime.ParseExact(_mockedConfig["CONFERENCE_DATE"],"dd-MM-yyyy",null);
+            var stringDate = Date.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("en-US"));
+
+            Assert.AreEqual(stringDate, "01 April 2019");
+        }
+
+        #region NON TESTABLE METHODS
         private string GetTextFromWordDoc()
         {
             _wordTemplateManager.GetTemplateFromContact(
@@ -85,9 +97,10 @@ namespace BusinessLayer.Tests
             {
                 docText = sr.ReadToEnd();
             }
-
             wordDocument.Close();
             return docText;
         }
+        #endregion 
+
     }
 }

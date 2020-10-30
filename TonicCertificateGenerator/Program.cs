@@ -33,7 +33,7 @@ namespace TonicCertificateGenerator
         private static IServiceProvider SetupServices(Options options)
         {
             var configuration = SetupConfiguration(options);
-            var logger = new LoggerConfiguration().WriteTo.Console().WriteTo.File("logs.txt").CreateLogger();
+            var logger = new LoggerConfiguration().ReadFrom.Configuration(configuration, sectionName: "SerilogConf").CreateLogger();
             var serviceCollection = new ServiceCollection()
                 .AddSingleton<IContactManager, ContactManager>()
                 .AddSingleton<IExcelFilesManager, ExcelFilesManager>()

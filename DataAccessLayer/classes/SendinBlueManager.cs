@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
@@ -39,8 +40,21 @@ namespace DataAccessLayer
             mail.Subject = getTemplate.Subject;
             mail.Body = result;
             mail.IsBodyHtml = true;
-            _smtp.Send(mail);
-            _logger.Information("Sending email to {name} [{email}]", contactFilePathPair.Key.Name, to);
+            try {
+                _smtp.Send(mail);
+                _logger.Information("Sending email to {name} [{email}]", contactFilePathPair.Key.Name, to);
+            }
+            catch (SmtpFailedRecipientException ex)
+            {
+                _logger.Error("Delivery failed to {name} | {email}", contactFilePathPair.Key.Name, to);
+                Console.WriteLine("Delivery failed to {name} | {email}" ,contactFilePathPair.Key.Mail, ex.FailedRecipient);
+            }
+            catch (Exception e)
+            {
+                _logger.Error($"Error while sending the email to {contactFilePathPair.Key.Mail}");
+                Console.WriteLine($"Error while sending the email to {contactFilePathPair.Key.Mail} : {e}");
+            }
+
         }
 
         private void ConfigureSmtpClient()

@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using Models;
+using Serilog;
 
 namespace DataAccessLayer
 {
@@ -11,6 +14,12 @@ namespace DataAccessLayer
     {
         private SpreadsheetDocument _document;
         private WorkbookPart _workbookPart;
+        private readonly ILogger _logger;
+
+        public ExcelFilesManager(ILogger logger)
+        {
+            _logger = logger;
+        }
 
         public void SetSourceFile(string path)
         {
@@ -21,7 +30,6 @@ namespace DataAccessLayer
         }
 
 
-        // Only for 3 column excel file. Have to modify GetContact method to separate the string separation logic 
         public List<Contact> GetContacts()
         {
             if (_document == null) throw new FileNotFoundException();
@@ -50,12 +58,16 @@ namespace DataAccessLayer
 
         private void ExtractData(IEnumerable<Row> rows, List<Contact> contacts)
         {
+            rows.ToList();
             foreach (var row in rows)
             {
                 var cellList = row.Descendants<Cell>().ToList();
-                var name = $"{GetCellValue(cellList[0])} {GetCellValue(cellList[1])}";
-                var mail = $"{GetCellValue(cellList[2])}";
-                contacts.Add(new Contact {Name = name, Mail = mail});
+                var totalColumns = cellList.Count;
+                var name = totalColumns == 2 ? GetCellValue(cellList[0]) : $"{GetCellValue(cellList[0])} {GetCellValue(cellList[1])}";
+                var mail = totalColumns == 2 ? GetCellValue(cellList[1]) : $"{GetCellValue(cellList[2])}";
+                if (IsValidEmail(mail))
+                    contacts.Add(new Contact { Name = name, Mail = mail });
+                else _logger.Error($"Email is incorrect for {name} : {mail}");
             }
         }
 
@@ -67,6 +79,13 @@ namespace DataAccessLayer
                 return _workbookPart.SharedStringTablePart.SharedStringTable.ChildElements.GetItem(int.Parse(value))
                     .InnerText;
             return value;
+        }
+
+        private bool IsValidEmail(string mail)
+        {
+            var pattern = @"\A(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
+            Regex reg = new Regex(pattern);
+            return reg.IsMatch(mail);
         }
     }
 }
