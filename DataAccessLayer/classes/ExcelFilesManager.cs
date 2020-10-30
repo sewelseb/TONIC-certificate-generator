@@ -65,7 +65,7 @@ namespace DataAccessLayer
                 var totalColumns = cellList.Count;
                 var name = totalColumns == 2 ? GetCellValue(cellList[0]) : $"{GetCellValue(cellList[0])} {GetCellValue(cellList[1])}";
                 var mail = totalColumns == 2 ? GetCellValue(cellList[1]) : $"{GetCellValue(cellList[2])}";
-                if (NotContainError(mail))
+                if (IsValidEmail(mail))
                     contacts.Add(new Contact { Name = name, Mail = mail });
                 else _logger.Error($"Email is incorrect for {name} : {mail}");
             }
@@ -81,7 +81,7 @@ namespace DataAccessLayer
             return value;
         }
 
-        private bool NotContainError(string mail)
+        private bool IsValidEmail(string mail)
         {
             var pattern = @"\A(?:[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
             Regex reg = new Regex(pattern);

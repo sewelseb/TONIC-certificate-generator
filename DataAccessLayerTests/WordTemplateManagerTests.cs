@@ -73,6 +73,7 @@ namespace BusinessLayer.Tests
             _wordTemplateManager.SetOutputDir("testFiles/");
             _wordTemplateManager.SetTemplateFile("testFiles/WordTest.docx");
             var docText = GetTextFromWordDoc();
+
             Assert.IsTrue(docText.Contains("Hello World"));
         }
 
@@ -81,6 +82,7 @@ namespace BusinessLayer.Tests
         {
             var Date = DateTime.ParseExact(_mockedConfig["CONFERENCE_DATE"],"dd-MM-yyyy",null);
             var stringDate = Date.ToString("dd MMMM yyyy", new System.Globalization.CultureInfo("en-US"));
+
             Assert.AreEqual(stringDate, "01 April 2019");
         }
 
